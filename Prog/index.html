@@ -318,33 +318,26 @@ int main(void) {
 </code></pre>
             </div>
 
-            <div class="code-card">
-
-            <div class="card-header">
-
-            <h2>Estruturas de laço:</h2>
-
-            <button class="copy-btn">
-            📋
-            </button>
-
-        </div>
-
-        <p class="code-description">
-            <strong class="tt">For:</strong> for em C é uma estrutura de repetição ideal quando se sabe exatamente quantas vezes um bloco de código deve ser executado
+                    <p class="code-description">
+            <strong class="tt">For:</strong> for em C é uma estrutura de repetição ideal quando se sabe exatamente quantas vezes um bloco de código deve ser executado 
+        </p>
 
         <pre><code class="text-box">#include &lt;stdio.h&gt;
 int main(void) {
-    int A=5, B=2, i;
+    int A = 5, B = 2, i;
 
-    for (i=0; i<A; i++) { // for (VALOR INICIAL; CONDIÇÃO; OQUE FAZER)
-        B = B+1;
-        printf("I = %d \t B FOR = %d\n", B, i);
+    // Estrutura: for (INICIALIZAÇÃO; CONDIÇÃO; INCREMENTO)
+    for (i = 0; i < A; i++) { 
+        B = B + 1;
+        // Inverti a ordem no printf para que o valor de 'i' apareça em 'I' 
+        // e o valor de 'B' apareça em 'B FOR'
+        printf("I = %d \t B FOR = %d\n", i, B);
     }
 
     return 0;
 }
 </code></pre>
+</p></div>
 
             </div>
 
