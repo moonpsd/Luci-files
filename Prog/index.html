@@ -430,9 +430,20 @@ int main()
         <img src="./img/skull.png" class="icon">
         <p>Luc-files©</p>
         <button type="button" id="testPulsoPixel" style="padding:10px 16px;cursor:pointer;">Testar Pulso Pixel</button>
-        <span id="pulsoStatus" role="status"></span>
+        
     </footer>
 
+<dialog id="pulsoModal" aria-labelledby="pulsoTitle" style="width:min(380px,85vw);box-sizing:border-box;background:#171717;color:#fff;border:1px solid #444;border-radius:14px;padding:28px;text-align:center;font-family:Arimo,sans-serif;box-shadow:0 12px 50px #0008;">
+    <div id="pulsoIndicator" aria-hidden="true" style="font-size:36px;margin-bottom:12px;"></div>
+    <h2 id="pulsoTitle" style="margin:0 0 12px;">Pulso Pixel</h2>
+    <p id="pulsoStatus" role="status" aria-live="polite" style="line-height:1.5;"></p>
+    <button type="button" id="pulsoClose" style="margin-top:18px;padding:10px 24px;border:0;border-radius:6px;cursor:pointer;">Fechar</button>
+</dialog>
+<style>
+#pulsoModal::backdrop { background: rgba(0,0,0,.72); }
+#pulsoIndicator.loading { display:inline-block; width:32px; height:32px; border:3px solid #555; border-top-color:#fff; border-radius:50%; animation:pulsoSpin .8s linear infinite; }
+@keyframes pulsoSpin { to { transform:rotate(360deg); } }
+</style>
 <script src="script.js"></script>
 
 
@@ -441,10 +452,19 @@ int main()
 (function () {
     var botao = document.getElementById('testPulsoPixel');
     var status = document.getElementById('pulsoStatus');
+    var modal = document.getElementById('pulsoModal');
+    var indicator = document.getElementById('pulsoIndicator');
+    function atualizarEstado(tipo, mensagem) {
+        status.textContent = mensagem;
+        indicator.className = tipo === 'loading' ? 'loading' : '';
+        indicator.textContent = tipo === 'success' ? '✓' : tipo === 'error' ? '✕' : '';
+        indicator.style.color = tipo === 'success' ? '#4ade80' : tipo === 'error' ? '#f87171' : '#fff';
+    }
+    document.getElementById('pulsoClose').addEventListener('click', function () { modal.close(); });
     function carregarPixel() {
+        if (!modal.open) modal.showModal();
         if (document.getElementById('pulso-pixel')) return;
-        botao.disabled = true;
-        status.textContent = 'Carregando...';
+        atualizarEstado('loading', 'Carregando o script do Pulso Pixel...');
         var pixel = document.createElement('script');
         pixel.id = 'pulso-pixel';
         pixel.defer = true;
@@ -452,13 +472,12 @@ int main()
         pixel.setAttribute('data-config', '32fea1d9-16fc-468e-8595-89809a4b7adb');
         pixel.setAttribute('data-page-view', 'true');
         pixel.addEventListener('load', function () {
-            status.textContent = 'Script carregado!';
+            atualizarEstado('success', 'Script carregado com sucesso! Confira no CRM se a visualização foi registrada.');
             console.info('[Pulso Pixel] Script carregado.');
         });
         pixel.addEventListener('error', function () {
-            status.textContent = 'Falha ao carregar. Tente novamente.';
+            atualizarEstado('error', 'Falha ao carregar o script. Verifique sua conexão e tente novamente.');
             pixel.remove();
-            botao.disabled = false;
             console.error('[Pulso Pixel] Falha ao carregar o script.');
         });
         document.head.appendChild(pixel);
