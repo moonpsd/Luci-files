@@ -433,5 +433,28 @@ int main()
 
 <script src="script.js"></script>
 
+
+<!-- Teste do Pulso Pixel: carrega uma única vez na primeira interação -->
+<script>
+(function () {
+    function carregarPixel() {
+        var pixel = document.createElement('script');
+        pixel.id = 'pulso-pixel';
+        pixel.defer = true;
+        pixel.src = 'https://avance-crm-teste.pedrovieiraneto2007.workers.dev/pulso-pixel.js?v=2';
+        pixel.setAttribute('data-config', '32fea1d9-16fc-468e-8595-89809a4b7adb');
+        pixel.setAttribute('data-page-view', 'true');
+        pixel.addEventListener('load', function () {
+            console.info('[Pulso Pixel] Script carregado.');
+        });
+        pixel.addEventListener('error', function () {
+            console.error('[Pulso Pixel] Falha ao carregar o script.');
+        });
+        document.head.appendChild(pixel);
+    }
+    document.addEventListener('click', carregarPixel, { once: true, capture: true });
+})();
+</script>
+
 </body>
 </html>
