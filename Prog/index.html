@@ -429,15 +429,22 @@ int main()
     <footer>
         <img src="./img/skull.png" class="icon">
         <p>Luc-files©</p>
+        <button type="button" id="testPulsoPixel" style="padding:10px 16px;cursor:pointer;">Testar Pulso Pixel</button>
+        <span id="pulsoStatus" role="status"></span>
     </footer>
 
 <script src="script.js"></script>
 
 
-<!-- Teste do Pulso Pixel: carrega uma única vez na primeira interação -->
+<!-- Teste do Pulso Pixel: carrega somente pelo botão -->
 <script>
 (function () {
+    var botao = document.getElementById('testPulsoPixel');
+    var status = document.getElementById('pulsoStatus');
     function carregarPixel() {
+        if (document.getElementById('pulso-pixel')) return;
+        botao.disabled = true;
+        status.textContent = 'Carregando...';
         var pixel = document.createElement('script');
         pixel.id = 'pulso-pixel';
         pixel.defer = true;
@@ -445,14 +452,18 @@ int main()
         pixel.setAttribute('data-config', '32fea1d9-16fc-468e-8595-89809a4b7adb');
         pixel.setAttribute('data-page-view', 'true');
         pixel.addEventListener('load', function () {
+            status.textContent = 'Script carregado!';
             console.info('[Pulso Pixel] Script carregado.');
         });
         pixel.addEventListener('error', function () {
+            status.textContent = 'Falha ao carregar. Tente novamente.';
+            pixel.remove();
+            botao.disabled = false;
             console.error('[Pulso Pixel] Falha ao carregar o script.');
         });
         document.head.appendChild(pixel);
     }
-    document.addEventListener('click', carregarPixel, { once: true, capture: true });
+    botao.addEventListener('click', carregarPixel);
 })();
 </script>
 
